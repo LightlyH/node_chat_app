@@ -13,6 +13,16 @@ var io = socketIO(server);
 io.on('connection', socket => {
   console.log('New user connected');
 
+  socket.emit('newMessage', {
+    from: 'Sasha',
+    text: 'Good morning!',
+    createdAt: 123
+  });
+
+  socket.on('createMessage', newMessage => { // in back-end, arrow funcs are allowed
+    console.log('createMessage', newMessage);
+  });
+
   socket.on('disconnect', () => {
     console.log('User was disconnected');
   });
