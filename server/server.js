@@ -13,14 +13,19 @@ var io = socketIO(server);
 io.on('connection', socket => {
   console.log('New user connected');
 
-  socket.emit('newMessage', {
-    from: 'Sasha',
-    text: 'Good morning!',
-    createdAt: 123
-  });
+  // socket.emit('newMessage', {
+  //   from: 'Sasha',
+  //   text: 'Good morning!',
+  //   createdAt: 123
+  // });
 
-  socket.on('createMessage', newMessage => { // in back-end, arrow funcs are allowed
-    console.log('createMessage', newMessage);
+  socket.on('createMessage', message => { // in back-end, arrow funcs are allowed
+    console.log('createMessage', message);
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    });
   });
 
   socket.on('disconnect', () => {
