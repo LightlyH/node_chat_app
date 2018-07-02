@@ -9,10 +9,11 @@ socket.on('disconnect', function() {
 });
 
 socket.on('newMessage', function(message) {
-  console.log('New message', message);
+  // console.log('New message', message);
+  var formattedTime = moment(message.createdAt).format('h:mm a');
 
   var li = $('<li></li>');
-  li.text(`${message.from}: ${message.text}`);
+  li.text(`${message.from} ${formattedTime}: ${message.text}`);
 
   $('#messages').append(li);
 });
@@ -25,10 +26,12 @@ socket.on('newMessage', function(message) {
 // });
 
 socket.on('newLocationMessage', function(message) {
+  var formattedTime = moment(message.createdAt).format('h:mm a');
+
   var li = $('<li></li>');
   var a = $('<a target="_blank">My current location</a>');
 
-  li.text(`${message.from}: `); // safer then using template string
+  li.text(`${message.from} ${formattedTime}: `); // safer then using template string
   a.attr('href', message.url);
   li.append(a);
   $('#messages').append(li);
