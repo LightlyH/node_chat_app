@@ -9,13 +9,22 @@ socket.on('disconnect', function() {
 });
 
 socket.on('newMessage', function(message) {
-  // console.log('New message', message);
   var formattedTime = moment(message.createdAt).format('h:mm a');
+  var template = $('#message-template').html();
+  var html = Mustache.render(template, {
+    text: message.text,
+    from: message.from,
+    createdAt: formattedTime
+  });
 
-  var li = $('<li></li>');
-  li.text(`${message.from} ${formattedTime}: ${message.text}`);
+  $('#messages').append(html);
 
-  $('#messages').append(li);
+  // console.log('New message', message);
+
+  // var li = $('<li></li>');
+  // li.text(`${message.from} ${formattedTime}: ${message.text}`);
+  //
+  // $('#messages').append(li);
 });
 
 // socket.emit('createMessage', {
@@ -27,14 +36,23 @@ socket.on('newMessage', function(message) {
 
 socket.on('newLocationMessage', function(message) {
   var formattedTime = moment(message.createdAt).format('h:mm a');
+  var template = $('#location-message-template').html();
+  var html = Mustache.render(template, {
+    from: message.from,
+    url: message.url,
+    createdAt: formattedTime
+  });
 
-  var li = $('<li></li>');
-  var a = $('<a target="_blank">My current location</a>');
+  $('#messages').append(html);
 
-  li.text(`${message.from} ${formattedTime}: `); // safer then using template string
-  a.attr('href', message.url);
-  li.append(a);
-  $('#messages').append(li);
+
+  // var li = $('<li></li>');
+  // var a = $('<a target="_blank">My current location</a>');
+
+  // li.text(`${message.from} ${formattedTime}: `); // safer then using template string
+  // a.attr('href', message.url);
+  // li.append(a);
+  // $('#messages').append(li);
 });
 
 $('#message-form').on('submit', function(e) {
